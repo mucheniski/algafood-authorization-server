@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "35f18105-0834-4da5-92c7-4c79bfffc6a8",
+		"_postman_id": "a227ab5d-6fe1-4ff6-a458-e77759bd5d6b",
 		"name": "Authorization",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -63,19 +63,7 @@
 			"name": "check token",
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "password",
-							"value": "web123",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "algafood-web",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
