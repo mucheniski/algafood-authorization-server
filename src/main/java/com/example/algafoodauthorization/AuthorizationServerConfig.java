@@ -3,6 +3,7 @@ package com.example.algafoodauthorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -20,9 +21,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     /*
     * O Client é o app, site ou serviço que vai buscar o token para consumir os recursos
     * não é o usuário, o usuário se loga no client
+    *
+    * o Padrão de tempo de expiração do refresh_token é de 30 dias, mas pode ser configurado também
     * */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -30,7 +36,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .inMemory()
                 .withClient("algafood-web")
                 .secret(passwordEncoder.encode("web123"))
-                .authorizedGrantTypes("password")
+                .authorizedGrantTypes("password", "refresh_token")
                 .scopes("write", "read")
                 .accessTokenValiditySeconds(60 * 60 * 6) // 6 horas (padrão é 12 horas)
             .and()
@@ -46,7 +52,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager);
+        endpoints
+                .authenticationManager(authenticationManager)
+                .userDetailsService(userDetailsService);
     }
 
 }
