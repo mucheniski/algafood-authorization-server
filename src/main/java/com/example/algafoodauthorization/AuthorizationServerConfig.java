@@ -38,7 +38,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("web123"))
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("write", "read")
-                .accessTokenValiditySeconds(60 * 60 * 6) // 6 horas (padrão é 12 horas)
+                .accessTokenValiditySeconds(horasExpiracao(6)) // 6 horas (padrão é 12 horas)
+                .refreshTokenValiditySeconds(horasExpiracao(24)) // 24 horas
             .and()
                 .withClient("checktoken")
                     .secret(passwordEncoder.encode("check123"));
@@ -54,7 +55,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
                 .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService)
+                .reuseRefreshTokens(false); // Toda vez que o refresh_token é usado ele é inválido, assim o client precisa logar de novo
+    }
+
+    private int horasExpiracao(int quantidadeHoras) {
+        return 60 * 60 * quantidadeHoras;
     }
 
 }
