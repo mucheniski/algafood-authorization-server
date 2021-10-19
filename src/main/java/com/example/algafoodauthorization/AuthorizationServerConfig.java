@@ -33,7 +33,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients
-                .inMemory()
+            .inMemory()
                 .withClient("algafood-web")
                 .secret(passwordEncoder.encode("web123"))
                 .authorizedGrantTypes("password", "refresh_token") // O padrão do refresh_token é de 30 dias
@@ -41,8 +41,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenValiditySeconds(horasExpiracao(6)) // 6 horas (padrão é 12 horas)
                 .refreshTokenValiditySeconds(horasExpiracao(24)) // 24 horas
             .and()
+                .withClient("aplicacao-terceira")// Pode ser em qualquer linguagem que consome nosso authorization
+                .secret(passwordEncoder.encode("terceiro123"))
+                .authorizedGrantTypes("client_credentials")
+                .scopes("read")
+            .and()
                 .withClient("checktoken")
-                    .secret(passwordEncoder.encode("check123"));
+                .secret(passwordEncoder.encode("check123"));
     }
 
     @Override
