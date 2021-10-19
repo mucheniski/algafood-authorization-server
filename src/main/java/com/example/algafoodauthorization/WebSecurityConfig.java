@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+//    Esse bean é usando apenas no passowrd flow para a classe AuthorizationServerConfig
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {

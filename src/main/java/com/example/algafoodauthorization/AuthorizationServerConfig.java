@@ -36,7 +36,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .inMemory()
                 .withClient("algafood-web")
                 .secret(passwordEncoder.encode("web123"))
-                .authorizedGrantTypes("password", "refresh_token")
+                .authorizedGrantTypes("password", "refresh_token") // O padrão do refresh_token é de 30 dias
                 .scopes("write", "read")
                 .accessTokenValiditySeconds(horasExpiracao(6)) // 6 horas (padrão é 12 horas)
                 .refreshTokenValiditySeconds(horasExpiracao(24)) // 24 horas
@@ -54,7 +54,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-                .authenticationManager(authenticationManager)
+                .authenticationManager(authenticationManager) // Somente o fluxo password flow precisa do authenticationManager
                 .userDetailsService(userDetailsService)
                 .reuseRefreshTokens(false); // Toda vez que o refresh_token é usado ele é inválido, assim o client precisa logar de novo
     }
