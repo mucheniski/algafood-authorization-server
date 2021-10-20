@@ -41,13 +41,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenValiditySeconds(horasExpiracao(6)) // 6 horas (padrão é 12 horas)
                 .refreshTokenValiditySeconds(horasExpiracao(24)) // 24 horas
             .and()
-                .withClient("aplicacao-terceira")// Pode ser em qualquer linguagem que consome nosso authorization
+                .withClient("aplicacao-terceira") // Pode ser em qualquer linguagem que consome nosso authorization
                 .secret(passwordEncoder.encode("terceiro123"))
                 .authorizedGrantTypes("client_credentials")
                 .scopes("read")
             .and()
                 .withClient("checktoken")
-                .secret(passwordEncoder.encode("check123"));
+                .secret(passwordEncoder.encode("check123"))
+            .and()
+                .withClient("aplicacao-analitica") // Novo cliente que vai consumir autorização do authorization-server
+                .secret(passwordEncoder.encode("analitica123"))
+                .authorizedGrantTypes("authorization_code")
+                .redirectUris("https://www.aplicacao-analitica/analise") // É preciso cadastrar as uris de retorno nesse fluxo, pode existir mais de uma, separadas por virgula.
+                .scopes("write", "read");
     }
 
     @Override
