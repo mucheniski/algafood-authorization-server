@@ -1,6 +1,7 @@
 package com.example.algafoodauthorization;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 @Configuration
 @EnableAuthorizationServer
@@ -68,7 +70,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints
                 .authenticationManager(authenticationManager) // Somente o fluxo password flow precisa do authenticationManager
                 .userDetailsService(userDetailsService)
-                .reuseRefreshTokens(false); // Toda vez que o refresh_token é usado ele é inválido, assim o client precisa logar de novo
+                .reuseRefreshTokens(false) // Toda vez que o refresh_token é usado ele é inválido, assim o client precisa logar de novo
+                .accessTokenConverter(jwtAccessTokenConverter());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setSigningKey("chave-secreta");
+        return jwtAccessTokenConverter;
     }
 
     private int horasExpiracao(int quantidadeHoras) {
