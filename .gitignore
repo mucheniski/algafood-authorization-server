@@ -1,8 +1,8 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+!**/src/main/**
+!**/src/test/**
 
 ### STS ###
 .apt_generated
@@ -26,8 +26,13 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+
+### https://github.com/spring-projects/spring-security/pull/6860/commits/b441c47cd0ccc6e3ff52ec755fd4052eb8271be9
+!etc/eclipse/.checkstyle
+.checkstyle
+s101plugin.state
+.attach_pid*
+*.jks
